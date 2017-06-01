@@ -1,7 +1,9 @@
 package mainPack;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 
+import entities.Entity;
 import models.RawModel;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
@@ -30,10 +32,6 @@ public class Main {
 				0,1,3,3,1,2
 		};
 		
-		int[] indices1 =  {
-				0,1,3,3,1,2
-		};
-		
 		float[] textureCoords = {
 				0,0,
 				0,1,
@@ -42,16 +40,19 @@ public class Main {
 		};
 
 		RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("testTexture"));
-		TexturedModel texturedModel = new TexturedModel(model,texture);
+		
+		TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("testTexture")));
+		
+		Entity entity = new Entity(staticModel, new Vector3f(0,0,0),0,0,0,1);
 
 		while (!Display.isCloseRequested()) {
+			entity.increaseRotation(0.02f, 0.003f, 0.1f);
 			renderer.prepare();
 			// game logic
 
 			// render
 			shader.start();
-			renderer.render(texturedModel);
+			renderer.render(entity,shader);
 			shader.stop();
 			DisplayManager.updateDisplay();
 
