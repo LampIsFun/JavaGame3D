@@ -10,9 +10,8 @@ import models.RawModel;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
+import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
-import renderEngine.Renderer;
-import shaders.StaticShader;
 import textures.ModelTexture;
 
 public class Main {
@@ -22,43 +21,37 @@ public class Main {
 		DisplayManager.createDisplay();
 
 		Loader loader = new Loader();
-		StaticShader shader = new StaticShader();
-		Renderer renderer = new Renderer(shader);
+
 
 		RawModel model = OBJLoader.loadObjModel("dragon", loader);
 		TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("testTexture")));
 		ModelTexture texture = staticModel.getTexture();
 		texture.setShineDamper(10);
 		texture.setReflectivity(1);
-		Entity entity = new Entity(staticModel, new Vector3f(0,0,-25),0,0,0,1);
+		Entity dragon = new Entity(staticModel, new Vector3f(0,0,-25),0,0,0,1);
 		Entity entity2 = new Entity(staticModel, new Vector3f(-10,0,-30),0,0,0,1);
 		Light light = new Light(new Vector3f(200,200,100),new Vector3f(1,1,1));
 		
 		Camera camera = new Camera();
+		camera.setPosition(-2, 5, 10);
 
+		MasterRenderer renderer = new MasterRenderer();
 		while (!Display.isCloseRequested()) {
-			entity.increaseRotation(0.00f, 0.5f, 0.0f);
+			dragon.increaseRotation(0.00f, 0.5f, 0.0f);
 			entity2.increaseRotation(0.00f, 0.2f, 0.0f);
 			camera.move();
-			renderer.prepare();
 			// game logic
 
 			// render
-			shader.start();
-			shader.loadLight(light);
+			renderer.processEntity(dragon);
+			renderer.processEntity(entity2);
 			
-			
-			shader.loadViewMatrix(camera);
-			renderer.render(entity,shader);
-			renderer.render(entity2,shader);
-			
-			
-			shader.stop();
+			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
 
 		}
 		
-		shader.cleanUp();
+		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
 	}
