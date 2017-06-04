@@ -23,13 +23,20 @@ public class Main {
 		Loader loader = new Loader();
 
 
-		RawModel model = OBJLoader.loadObjModel("dragon", loader);
-		TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("testTexture")));
+		RawModel model = OBJLoader.loadObjModel("komodoDragon", loader);
+		TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("komodoSkin")));
 		ModelTexture texture = staticModel.getTexture();
+		
+		RawModel modelLight = OBJLoader.loadObjModel("CoolHeadThing", loader);
+		TexturedModel staticModelLight = new TexturedModel(modelLight,new ModelTexture(loader.loadTexture("testTexture")));
+		ModelTexture textureLight = staticModelLight.getTexture();
 		texture.setShineDamper(10);
 		texture.setReflectivity(1);
+		
+		textureLight.setShineDamper(10);
+		textureLight.setReflectivity(1);
 		Entity dragon = new Entity(staticModel, new Vector3f(0,0,-25),0,0,0,1);
-		Entity entity2 = new Entity(staticModel, new Vector3f(-10,0,-30),0,0,0,1);
+		Entity modelSun = new Entity(staticModelLight, new Vector3f(200,200,100),0,0,0,1);
 		Light light = new Light(new Vector3f(200,200,100),new Vector3f(1,1,1));
 		
 		Camera camera = new Camera();
@@ -37,14 +44,13 @@ public class Main {
 
 		MasterRenderer renderer = new MasterRenderer();
 		while (!Display.isCloseRequested()) {
-			dragon.increaseRotation(0.00f, 0.5f, 0.0f);
-			entity2.increaseRotation(0.00f, 0.2f, 0.0f);
+			dragon.increaseRotation(0.00f, 0.2f, 0.0f);
 			camera.move();
 			// game logic
 
 			// render
 			renderer.processEntity(dragon);
-			renderer.processEntity(entity2);
+			renderer.processEntity(modelSun);
 			
 			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
