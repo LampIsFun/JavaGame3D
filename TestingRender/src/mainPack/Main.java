@@ -1,5 +1,7 @@
 package mainPack;
 
+import java.util.Random;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -16,40 +18,64 @@ import textures.ModelTexture;
 
 public class Main {
 
+	
+	
 	public static void main(String[] args) {
 
+		
+		RawModel[] model = new RawModel[100];
+		TexturedModel[] staticModel = new TexturedModel[100];
+		ModelTexture[] texture = new ModelTexture[100];
+		Entity[] dragon = new Entity[100];
+		
 		DisplayManager.createDisplay();
 
 		Loader loader = new Loader();
+		
+		
+		
+		for(int i=0;i<100;i++) {
+			model[i] = OBJLoader.loadObjModel("dragon", loader);
+			staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture")));
+			texture[i] = staticModel[i].getTexture();
+			texture[i].setShineDamper(2);
+			texture[i].setReflectivity(1);
+			Random n = new Random();
+			int rx = n.nextInt(100);
+			int ry = n.nextInt(100);
+			int rz = n.nextInt(100);
+			dragon[i] = new Entity(staticModel[i], new Vector3f(rx,ry,rz),0,0,0,1);
+			dragon[i].increaseRotation(rx*n.nextInt(3), ry*n.nextInt(3), rz*n.nextInt(3));
+		}
 
 
-		RawModel model = OBJLoader.loadObjModel("komodoDragon", loader);
-		TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("komodoSkin")));
-		ModelTexture texture = staticModel.getTexture();
+		
 		
 		RawModel modelLight = OBJLoader.loadObjModel("CoolHeadThing", loader);
 		TexturedModel staticModelLight = new TexturedModel(modelLight,new ModelTexture(loader.loadTexture("testTexture")));
 		ModelTexture textureLight = staticModelLight.getTexture();
-		texture.setShineDamper(10);
-		texture.setReflectivity(1);
 		
 		textureLight.setShineDamper(10);
-		textureLight.setReflectivity(1);
-		Entity dragon = new Entity(staticModel, new Vector3f(0,0,-25),0,0,0,1);
-		Entity modelSun = new Entity(staticModelLight, new Vector3f(200,200,100),0,0,0,1);
-		Light light = new Light(new Vector3f(200,200,100),new Vector3f(1,1,1));
+		textureLight.setReflectivity(2);
+		
+		Entity modelSun = new Entity(staticModelLight, new Vector3f(0,200,200),0,0,0,10);
+		Light light = new Light(new Vector3f(0,200,200),new Vector3f(1,1,1));
 		
 		Camera camera = new Camera();
 		camera.setPosition(-2, 5, 10);
 
 		MasterRenderer renderer = new MasterRenderer();
 		while (!Display.isCloseRequested()) {
-			dragon.increaseRotation(0.00f, 0.2f, 0.0f);
+			//dragon.increaseRotation(0.00f, 0.2f, 0.0f);
 			camera.move();
 			// game logic
 
 			// render
-			renderer.processEntity(dragon);
+			for(int i=0;i<100;i++) {
+				Entity in = dragon[i];
+				renderer.processEntity(in);
+			}
+			//renderer.processEntity(dragon);
 			renderer.processEntity(modelSun);
 			
 			renderer.render(light, camera);
