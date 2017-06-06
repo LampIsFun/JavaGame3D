@@ -27,6 +27,7 @@ public class Main {
 		TexturedModel[] staticModel = new TexturedModel[100];
 		ModelTexture[] texture = new ModelTexture[100];
 		Entity[] dragon = new Entity[100];
+		float[] rotSpd = new float[100];
 		
 		DisplayManager.createDisplay();
 
@@ -35,16 +36,51 @@ public class Main {
 		
 		
 		for(int i=0;i<100;i++) {
-			model[i] = OBJLoader.loadObjModel("dragon", loader);
-			staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture")));
+			model[i] = OBJLoader.loadObjModel("diamond", loader);
+			Random n = new Random();
+			int choice = n.nextInt(6);
+			switch(choice) {
+			case 0: {
+				staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture")));
+				break;
+			}
+			case 1: {
+				staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture2")));
+				break;
+			}
+			case 2: {
+				staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture3")));
+				break;
+			}
+			case 3: {
+				staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture4")));
+				break;
+			}
+			case 4: {
+				staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture5")));
+				break;
+			}
+			case 5: {
+				staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture6")));
+				break;
+			}
+			case 6: {
+				staticModel[i] = new TexturedModel(model[i],new ModelTexture(loader.loadTexture("testTexture6")));
+				break;
+			}
+			
+			}
+			
+			
 			texture[i] = staticModel[i].getTexture();
 			texture[i].setShineDamper(2);
 			texture[i].setReflectivity(1);
-			Random n = new Random();
+			
 			int rx = n.nextInt(100);
 			int ry = n.nextInt(100);
 			int rz = n.nextInt(100);
-			dragon[i] = new Entity(staticModel[i], new Vector3f(rx,ry,rz),0,0,0,1);
+			rotSpd[i] = (float) n.nextInt(100) / 100;
+			dragon[i] = new Entity(staticModel[i], new Vector3f(rx,ry,rz),0,0,0,7);
 			dragon[i].increaseRotation(rx*n.nextInt(3), ry*n.nextInt(3), rz*n.nextInt(3));
 		}
 
@@ -73,6 +109,7 @@ public class Main {
 			// render
 			for(int i=0;i<100;i++) {
 				Entity in = dragon[i];
+				dragon[i].increaseRotation(0, rotSpd[i], rotSpd[i]);
 				renderer.processEntity(in);
 			}
 			//renderer.processEntity(dragon);
