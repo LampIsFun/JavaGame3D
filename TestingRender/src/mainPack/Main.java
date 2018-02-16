@@ -76,9 +76,9 @@ public class Main {
 			texture[i].setShineDamper(2);
 			texture[i].setReflectivity(1);
 			
-			int rx = n.nextInt(100);
+			int rx = n.nextInt(100) - 50;
 			int ry = n.nextInt(100);
-			int rz = n.nextInt(100);
+			int rz = n.nextInt(100) - 150;
 			rotSpd[i] = (float) n.nextInt(100) / 100;
 			dragon[i] = new Entity(staticModel[i], new Vector3f(rx,ry,rz),0,0,0,7);
 			dragon[i].increaseRotation(rx*n.nextInt(3), ry*n.nextInt(3), rz*n.nextInt(3));
