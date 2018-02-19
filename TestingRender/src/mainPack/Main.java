@@ -14,6 +14,7 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
+import terrains.Terrain;
 import textures.ModelTexture;
 
 public class Main {
@@ -76,9 +77,9 @@ public class Main {
 			texture[i].setShineDamper(2);
 			texture[i].setReflectivity(1);
 			
-			int rx = n.nextInt(100) - 50;
+			int rx = n.nextInt(200) - 100;
 			int ry = n.nextInt(100);
-			int rz = n.nextInt(100) - 150;
+			int rz = n.nextInt(200) - 250;
 			rotSpd[i] = (float) n.nextInt(100) / 100;
 			dragon[i] = new Entity(staticModel[i], new Vector3f(rx,ry,rz),0,0,0,7);
 			dragon[i].increaseRotation(rx*n.nextInt(3), ry*n.nextInt(3), rz*n.nextInt(3));
@@ -94,8 +95,11 @@ public class Main {
 		textureLight.setShineDamper(10);
 		textureLight.setReflectivity(2);
 		
-		Entity modelSun = new Entity(staticModelLight, new Vector3f(0,200,200),0,0,0,10);
-		Light light = new Light(new Vector3f(0,200,200),new Vector3f(1,1,1));
+		Entity modelSun = new Entity(staticModelLight, new Vector3f(0,0,-25),0,0,0,10);
+		Light light = new Light(new Vector3f(3000,2000,2000),new Vector3f(1,1,1));
+		
+		Terrain terrain = new Terrain(-1,-1,loader,new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain2 = new Terrain(0,-1,loader,new ModelTexture(loader.loadTexture("grass")));
 		
 		Camera camera = new Camera();
 		camera.setPosition(-2, 5, 10);
@@ -112,6 +116,8 @@ public class Main {
 				dragon[i].increaseRotation(0, rotSpd[i], rotSpd[i]);
 				renderer.processEntity(in);
 			}
+			renderer.processTerrain(terrain);
+			renderer.processTerrain(terrain2);
 			//renderer.processEntity(dragon);
 			renderer.processEntity(modelSun);
 			
