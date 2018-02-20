@@ -1,7 +1,3 @@
-/entities/
-/renderEngine/
-/mainPack/
-/shaders/
-/terrains/
-/textures/
 /toolbox/
+/mainPack/
+/terrains/
