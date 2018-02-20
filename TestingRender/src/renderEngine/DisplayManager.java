@@ -15,8 +15,8 @@ public class DisplayManager {
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static double width = screenSize.getWidth();
 	static double height = screenSize.getHeight();
-	private static final int WIDTH = 400;
-	private static final int HEIGHT = 400;
+	private static final int WIDTH = 900;
+	private static final int HEIGHT = 900;
 	private static final int FPS_CAP = 120;
 
 	public static void createDisplay() {
