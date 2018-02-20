@@ -4,6 +4,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
+import terrains.Terrain;
+
 public class Camera {
 
 	private Vector3f position = new Vector3f(0, 0, 0);
@@ -12,14 +14,16 @@ public class Camera {
 	private float roll;
 	private float vspeed;
 	private boolean escape_down = false;
-	private static final float GROUND = 7f;
+	private float GROUND = 7f;
 
 	public Camera() {
 		Mouse.setGrabbed(true);
 	}
 
-	public void move() {
+	public void move(Terrain terrain) {
 
+		GROUND = terrain.getY(position.x, position.z) + 7.0f;
+		
 		if (Mouse.isGrabbed()) {
 		float arg_yaw = Mouse.getDX();
 		yaw += arg_yaw / 10;
@@ -44,7 +48,7 @@ public class Camera {
 			position.x -= Math.cos(Math.toRadians(yaw)) * 0.3;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			if (position.y == GROUND) {
+			if (Math.round(position.y) == Math.round(GROUND)) {
 				vspeed = 1;
 			}
 		}

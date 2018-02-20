@@ -40,16 +40,25 @@ public class Main {
 		final int GRASS_COUNT = 200;
 		Entity[] tree = new Entity[TREE_COUNT];
 		Entity[] grass = new Entity[GRASS_COUNT];
+		
+		Terrain terrain = new Terrain(-1, -1, loader, texturePack, blendMap, "heightMap");
+		Terrain terrain2 = new Terrain(0, -1, loader, texturePack, blendMap, "heightMap");
+		Terrain terrain3 = new Terrain(-1, 0, loader, texturePack, blendMap, "heightMap");
+		Terrain terrain4 = new Terrain(0, 0, loader, texturePack, blendMap, "heightMap");
 
 		for (int i = 0; i < TREE_COUNT; i++) {
+			float newX = (float) ((Math.random() * 600) - 300);
+			float newY = (float) ((Math.random() * 600) - 300);
 			tree[i] = createInstance("tree01", "treeTexture01", false, false, 1f, 0f,
-					new Vector3f((float) ((Math.random() * 600) - 300), 0, (float) ((Math.random() * 600) - 300)), 0,
+					new Vector3f(newX, terrain.getY(newX,newY), newY ), 0,
 					(float) ((Math.random() * 360)), 0, 1);
 		}
 		
 		for (int i = 0; i < GRASS_COUNT; i++) {
+			float newX = (float) ((Math.random() * 600) - 300);
+			float newY = (float) ((Math.random() * 600) - 300);
 			grass[i] = createInstance("grassModel", "grassTexture", true, true, 1f, 0f,
-					new Vector3f((float) ((Math.random() * 600) - 300), 0, (float) ((Math.random() * 600) - 300)), 0,
+					new Vector3f(newX, terrain.getY(newX, newY), newY), 0,
 					(float) ((Math.random() * 360)), 0, 4);
 		}
 
@@ -63,10 +72,7 @@ public class Main {
 
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 
-		Terrain terrain = new Terrain(-1, -1, loader, texturePack, blendMap);
-		Terrain terrain2 = new Terrain(0, -1, loader, texturePack, blendMap);
-		Terrain terrain3 = new Terrain(-1, 0, loader, texturePack, blendMap);
-		Terrain terrain4 = new Terrain(0, 0, loader, texturePack, blendMap);
+		
 
 		Camera camera = new Camera();
 		camera.setPosition(-2, 5, 10);
@@ -75,7 +81,8 @@ public class Main {
 		while (!Display.isCloseRequested()) {
 
 			// game logic
-			camera.move();
+				//get terrain currently on.
+			camera.move(terrain);
 			// render
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
